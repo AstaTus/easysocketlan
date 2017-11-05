@@ -1,9 +1,12 @@
-package com.astatus.easysocketlansample
+package com.astatus.easysocketlansampleserver.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
+
 import com.astatus.easysocketlan.LanServer
 import com.astatus.easysocketlan.listener.ILanServerListener
+import com.astatus.easysocketlansampleserver.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         private val LAN_SERVER_SEARCH_PORT: Int = 9000
         private val LAN_SERVER_SOCKET_PORT: Int = 10001
     }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var clientItemAdapter: Ada
+
 
     private var lanServer: LanServer =
             LanServer(LAN_SERVER_SEARCH_PORT, LAN_SERVER_SOCKET_PORT, object :ILanServerListener{
@@ -77,5 +84,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         lanServer.start()
+    }
+
+    private fun initView(){
+
     }
 }

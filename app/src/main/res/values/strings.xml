@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">easysocketlansample</string>
+
+    <string name="activity_main_search_state">search state:</string>
+    <string name="activity_main_search_stop">stop</string>
+    <string name="activity_main_search_running">searching</string>
+
+    <string name="activity_main_link_state">link state:</string>
+    <string name ="activity_main_link_unlink">unlink</string>
+    <string name ="activity_main_link_linking">linking</string>
+
+    <string name="activity_main_search_btn_text">search</string>
+
+    <string name="activity_main_link_text">client linked</string>
+
+    <string name="widget_client_name">name:</string>
+    <string name="widget_client_ip">ip:</string>
+    <string name="widget_client_message">message:</string>
+    <string name="widget_client_more_btn_text">more</string>
+    <string name="wideget_client_send_btn_text">send</string>
 </resources>

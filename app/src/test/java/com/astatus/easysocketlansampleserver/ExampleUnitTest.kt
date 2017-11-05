@@ -1,4 +1,4 @@
-package com.astatus.easysocketlansample
+package com.astatus.easysocketlansampleserver
 
 import org.junit.Test
 
