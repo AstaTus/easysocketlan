@@ -16,11 +16,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var clientItemAdapter: Ada
+    private lateinit var clientItemAdapter:
 
 
     private var lanServer: LanServer =
-            LanServer(LAN_SERVER_SEARCH_PORT, LAN_SERVER_SOCKET_PORT, object :ILanServerListener{
+            LanServer(LAN_SERVER_SEARCH_PORT, object :ILanServerListener{
                 override fun onReadError(p0: String?, p1: String?, p2: String?) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }

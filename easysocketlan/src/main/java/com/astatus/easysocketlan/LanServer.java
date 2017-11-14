@@ -1,5 +1,7 @@
 package com.astatus.easysocketlan;
 
+import android.util.Log;
+
 import com.astatus.easysocketlan.listener.ILanServerListener;
 
 import java.net.Socket;
@@ -15,6 +17,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class LanServer {
+
+    private static final String TAG = "LanServer";
 
     private int mSearchPort;
 
@@ -41,13 +45,17 @@ public class LanServer {
         mLanSocketMgr = new LanSocketManager(mPcketHandlerManager, mLanServerListener);
     }
 
-    public void send(String name, int code, String json){
-        LanSocket lan_socket = mLanSocketMgr.getVerificationLanSocket(name);
-        Packet packet = new Packet(code, json);
-        lan_socket.send(packet);
+    public void send(String id, int code, String json){
+        LanSocket lan_socket = mLanSocketMgr.getVerificationLanSocket(id);
+        if (lan_socket != null){
+            Packet packet = new Packet(code, json);
+            lan_socket.send(packet);
+        }else{
+             Log.d(TAG, "send:name not exist:" + id);
+        }
     }
 
-    public void addHandler(com.astatus.easysocketlan.PacketHandler handler){
+    public void addHandler(PacketHandler handler){
         mPcketHandlerManager.addHandler(handler);
     }
 
@@ -56,18 +64,20 @@ public class LanServer {
     }
 
     public void start(){
-        search();
+
         connect();
+        search();
     }
 
     public void search(){
 
         destroySearch();
 
-        mSearchObservalble = Observable.create(new SearchServerObservable(mSearchPort));
+        mSearchObservalble = Observable.create(new SearchServerObservable(mSearchPort, mSocketPort));
         mSearchObservalble.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SearchServerObserver(mLanServerListener));
+
     }
 
     public void connect(){
@@ -86,7 +96,7 @@ public class LanServer {
 
                     @Override
                     public void onNext(Socket socket) {
-                        mLanServerListener.onConnect(socket.getInetAddress().toString());
+                        mLanServerListener.onConnect(socket.getInetAddress().getHostAddress(), socket.getPort());
 
                         mLanSocketMgr.addLanSocket(socket);
                     }

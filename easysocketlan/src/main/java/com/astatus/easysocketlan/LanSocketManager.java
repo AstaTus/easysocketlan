@@ -1,6 +1,6 @@
 package com.astatus.easysocketlan;
 
-import com.astatus.easysocketlan.entity.VerificationEntity;
+import com.astatus.easysocketlan.entity.ClientDeviceEntity;
 import com.astatus.easysocketlan.listener.ILanSocketDisconnectListener;
 import com.astatus.easysocketlan.listener.ISocketServerListener;
 
@@ -12,9 +12,9 @@ import java.util.HashMap;
  */
 
 class LanSocketManager {
-    //<IP,LanSocket>
+    //<IP_PORT, LanSocket>
     private HashMap<String, LanSocket> mUnverificationLanSockets = new HashMap<>();
-    //<Name, LanSocket>
+    //<IP_PORT, LanSocket>
     private HashMap<String, LanSocket> mVerificationLanSockets = new HashMap<>();
 
     private com.astatus.easysocketlan.PacketHandlerManager mPacketHandlerManager;
@@ -24,29 +24,26 @@ class LanSocketManager {
     protected class LanSocketDisconnectListener implements ILanSocketDisconnectListener {
 
 
-        private void onUnverificationDisconnect(String ip){
-            if (mUnverificationLanSockets.containsKey(ip)){
-                LanSocket socket = mUnverificationLanSockets.get(ip);
-                mUnverificationLanSockets.remove(ip);
+        private void onUnverificationDisconnect(String id) {
+            if (mUnverificationLanSockets.containsKey(id)) {
+                LanSocket socket = mUnverificationLanSockets.get(id);
+                mUnverificationLanSockets.remove(id);
                 socket.destroy();
             }
         }
 
-        private void onVerificationDisconnect(String name){
-            if (mVerificationLanSockets.containsKey(name)){
-                LanSocket socket = mVerificationLanSockets.get(name);
-                mVerificationLanSockets.remove(name);
+        private void onVerificationDisconnect(String id) {
+            if (mVerificationLanSockets.containsKey(id)) {
+                LanSocket socket = mVerificationLanSockets.get(id);
+                mVerificationLanSockets.remove(id);
                 socket.destroy();
             }
         }
 
         @Override
-        public void onDisconnect(String ip, String name) {
-            if (name == ""){
-                onUnverificationDisconnect(ip);
-            }else{
-                onVerificationDisconnect(name);
-            }
+        public void onDisconnect(String id) {
+            onUnverificationDisconnect(id);
+            onVerificationDisconnect(id);
         }
     }
 
@@ -57,16 +54,16 @@ class LanSocketManager {
         mSocketServerListener = socketServerListener;
 
         mPacketHandlerManager.addHandler(
-                new com.astatus.easysocketlan.PacketHandler<VerificationEntity>(CmsgCode.CMSG_INTERNAL_VERIFICATION_CODE, VerificationEntity.class) {
+                new PacketHandler<ClientDeviceEntity>(CmsgCode.CMSG_INTERNAL_VERIFICATION_CODE, ClientDeviceEntity.class) {
             @Override
-            protected void parserError(String message) {
+            protected void parserError(String name, String message) {
 
             }
 
             @Override
-            protected void handle(VerificationEntity entity) {
-                verificationLanSocket(entity.getName(), entity.getIp());
-                mSocketServerListener.onVerification(entity.getName());
+            protected void handle(String name, ClientDeviceEntity entity) {
+                verificationLanSocket(entity);
+                mSocketServerListener.onVerification(entity);
             }
         });
     }
@@ -75,25 +72,31 @@ class LanSocketManager {
     public void addLanSocket(Socket socket){
 
         LanSocket lan_socket = new LanSocket(mPacketHandlerManager, mSocketServerListener, mDisconnectListener, socket);
-        mUnverificationLanSockets.put(lan_socket.getIP(), lan_socket);
+
+        mUnverificationLanSockets.put(lan_socket.getId(), lan_socket);
         lan_socket.init();
     }
 
-    public LanSocket getUnverificationLanSocket(String ip){
-        return mUnverificationLanSockets.get(ip);
+    public LanSocket getUnverificationLanSocket(String id){
+        return mUnverificationLanSockets.get(id);
 
     }
 
-    public LanSocket getVerificationLanSocket(String name){
-        return mVerificationLanSockets.get(name);
+    public LanSocket getVerificationLanSocket(String id){
+        return mVerificationLanSockets.get(id);
     }
 
 
-    public Boolean verificationLanSocket(String name, String ip){
-        LanSocket socket = getUnverificationLanSocket(ip);
+    private Boolean verificationLanSocket(ClientDeviceEntity entity){
+
+        String id = entity.getId();
+
+        LanSocket socket = getUnverificationLanSocket(id);
+
         if (socket != null){
-            mUnverificationLanSockets.remove(ip);
-            mVerificationLanSockets.put(name, socket);
+            mUnverificationLanSockets.remove(id);
+            mVerificationLanSockets.put(id, socket);
+
             return true;
         }
 

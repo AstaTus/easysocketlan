@@ -5,9 +5,7 @@ package com.astatus.easysocketlan.listener;
  */
 
 public interface ISocketWriteListener {
-    void onWriteStart(String ip, String name);
+    void onWriteStart(String id);
 
-    void onWrite(String ip, String name);
-
-    void onWriteError(String ip, String name, String error);
+    void onWrite(String id);
 }

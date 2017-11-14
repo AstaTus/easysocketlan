@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class PacketHandlerManager {
 
-    private HashMap<Integer, com.astatus.easysocketlan.PacketHandler<?>> mParsers;
+    private HashMap<Integer, PacketHandler<?>> mParsers;
 
     PacketHandlerManager(){
         mParsers = new HashMap();

@@ -6,5 +6,5 @@ package com.astatus.easysocketlan.listener;
 
 public interface ISocketListener extends ISocketReadListener, ISocketWriteListener {
 
-
+    void onDisconnect(String id, String error);
 }

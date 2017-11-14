@@ -9,7 +9,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -39,11 +38,13 @@ public class SearchServerObservable implements ObservableOnSubscribe<com.astatus
     }
 
 
-    private int mPort;
+    private int mSearchPort;
+    private int mConnectPort;
     private DatagramSocket mSocket = null;
 
-    SearchServerObservable(int port){
-        mPort = port;
+    SearchServerObservable(int searchPort, int connectPort){
+        mSearchPort = searchPort;
+        mConnectPort = connectPort;
     }
 
     @Override
@@ -62,11 +63,12 @@ public class SearchServerObservable implements ObservableOnSubscribe<com.astatus
         try {
             mSocket.setSoTimeout(RECEIVE_TIME_OUT);
             SearchEntity entity  = new SearchEntity();
+            entity.setConnectPort(mConnectPort);
             String json = new Gson().toJson(entity);
-            byte[] send_data = json.getBytes(Charset.forName("UTF-8"));
+            byte[] send_data = json.getBytes("UTF-8");
 
             DatagramPacket send_packet =
-                    new DatagramPacket(send_data, send_data.length, board_address, mPort);
+                    new DatagramPacket(send_data, send_data.length, board_address, mSearchPort);
 
             emitter.onNext(SearchState.SS_START);
             for (int i =0; i < SEARCHING_TIME; ++i){
@@ -89,7 +91,6 @@ public class SearchServerObservable implements ObservableOnSubscribe<com.astatus
         }
         finally{
             mSocket.close();
-            emitter.onNext(SearchState.SS_END);
         }
     }
 }

@@ -6,5 +6,5 @@ package com.astatus.easysocketlan.listener;
 
 public interface ILanSocketDisconnectListener {
 
-    void onDisconnect(String ip, String name);
+    void onDisconnect(String id);
 }

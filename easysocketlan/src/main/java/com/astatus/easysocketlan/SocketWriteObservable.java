@@ -4,7 +4,6 @@ import com.astatus.easysocketlan.Packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -20,9 +19,9 @@ public class SocketWriteObservable implements ObservableOnSubscribe<Integer> {
     private DataOutputStream dataOutputStream;
     private Socket mSocket;
 
-    private LinkedBlockingQueue<com.astatus.easysocketlan.Packet> mPacketQueue;
+    private LinkedBlockingQueue<Packet> mPacketQueue;
 
-    SocketWriteObservable(Socket socket, LinkedBlockingQueue<com.astatus.easysocketlan.Packet> packetQueue)
+    SocketWriteObservable(Socket socket, LinkedBlockingQueue<Packet> packetQueue)
     {
         mSocket = socket;
         mPacketQueue = packetQueue;
@@ -42,7 +41,7 @@ public class SocketWriteObservable implements ObservableOnSubscribe<Integer> {
                 dataOutputStream.writeInt(packet.getLength());
                 byte[] bytes = packet.getJsonBytes();
                 dataOutputStream.write(bytes, 0, bytes.length);
-
+                dataOutputStream.flush();
                 emmiter.onNext(packet.getCode());
             }
         }catch (IOException e){

@@ -30,6 +30,8 @@ public class LanSocket {
 
     private String mName = "";
 
+    private String mId = "";
+
     private LinkedBlockingQueue<Packet> mWaitPackets = new LinkedBlockingQueue<>(100);;
 
 
@@ -44,6 +46,7 @@ public class LanSocket {
     }
 
     public void init(){
+
         //read thread
         mReadObservale = Observable.create(new SocketReadObservable(mSocket));
         mReadObservale.subscribeOn(Schedulers.io())
@@ -52,23 +55,22 @@ public class LanSocket {
 
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mSocketListener.onReadStart(getIP(), mName);
+                        mSocketListener.onReadStart(getId());
                     }
 
                     @Override
                     public void onNext(Packet packet) {
                         com.astatus.easysocketlan.PacketHandler handler = mHandlerMgr.getHandler(packet.getCode());
                         if (handler != null){
-                            handler.parser(packet);
+                            handler.parser(mName, packet);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mSocketListener.onReadError(getIP(), mName, e.getMessage());
+                        mSocketListener.onDisconnect(getId(), e.getMessage());
 
-                        mDisconnectListener.onDisconnect(getIP(), mName);
-
+                        mDisconnectListener.onDisconnect(getId());
                     }
 
                     @Override
@@ -86,18 +88,18 @@ public class LanSocket {
 
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mSocketListener.onWriteStart(getIP(), mName);
+                        mSocketListener.onWriteStart(getId());
                     }
 
                     @Override
                     public void onNext(Integer integer) {
-                        mSocketListener.onWrite(getIP(), mName);
+                        mSocketListener.onWrite(getId());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mSocketListener.onWriteError(getIP(), mName, e.getMessage());
-                        mDisconnectListener.onDisconnect(getIP(), mName);
+                        mSocketListener.onDisconnect(getId(), e.getMessage());
+                        mDisconnectListener.onDisconnect(getId());
                     }
 
                     @Override
@@ -109,8 +111,12 @@ public class LanSocket {
     }
 
     public String getIP(){
-        return mSocket.getInetAddress().toString();
+        return mSocket.getInetAddress().getHostAddress();
     }
+
+    public String getId(){ return getIP() + '_' + getPort();}
+
+    public int getPort(){return  mSocket.getPort();}
 
     public void destroy(){
         if (mReadObservale != null){

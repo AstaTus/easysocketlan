@@ -1,5 +1,7 @@
 package com.astatus.easysocketlan;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,10 +27,14 @@ public class ConnectServerObservable implements ObservableOnSubscribe<Socket> {
 
         try{
             mServerSocket = new ServerSocket(mPort);
-
+            String localIP = mServerSocket.getInetAddress().getHostAddress();
+            Log.d("ConnectServerObservable", localIP);
             while (true){
 
                 Socket socket = mServerSocket.accept();
+
+                socket.setTcpNoDelay(true);
+                socket.setKeepAlive(true);
 
                 emitter.onNext(socket);
             }

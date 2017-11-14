@@ -5,9 +5,7 @@ package com.astatus.easysocketlan.listener;
  */
 
 public interface ISocketReadListener {
-    void onReadStart(String ip, String name);
+    void onReadStart(String id);
 
-    void onRead(String ip, String name);
-
-    void onReadError(String ip, String name, String error);
+    void onRead(String id);
 }

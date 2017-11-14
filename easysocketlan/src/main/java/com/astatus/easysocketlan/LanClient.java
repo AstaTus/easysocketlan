@@ -1,11 +1,7 @@
 package com.astatus.easysocketlan;
 
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-
 import com.astatus.easysocketlan.entity.ServerDeviceEntity;
-import com.astatus.easysocketlan.entity.VerificationEntity;
+import com.astatus.easysocketlan.entity.ClientDeviceEntity;
 import com.astatus.easysocketlan.listener.ILanClientListener;
 import com.astatus.easysocketlan.listener.ILanSocketDisconnectListener;
 import com.google.gson.Gson;
@@ -44,13 +40,11 @@ public class LanClient {
 
     private ServerDeviceEntity mServerDeviceEntity = null;
 
-    public LanClient(String name, int searchPort, int socketPort, ILanClientListener listener){
+    public LanClient(String name, int searchPort, ILanClientListener listener){
 
         mName = name;
 
         mSearchPort = searchPort;
-
-        mSocketPort = socketPort;
 
         mLanClientListener = listener;
 
@@ -102,7 +96,7 @@ public class LanClient {
     class LanSocketDisconnectListener implements ILanSocketDisconnectListener{
 
         @Override
-        public void onDisconnect(String ip, String name) {
+        public void onDisconnect(String id) {
             destroyConnect();
         }
     }
@@ -126,6 +120,7 @@ public class LanClient {
 
                         mLanClientListener.onConnectting();
                         mLocalIP = socket.getLocalAddress().getHostAddress();
+                        mSocketPort = socket.getLocalPort();
                         mLanSocket = new LanSocket(mPcketHandlerManager, mLanClientListener, new LanSocketDisconnectListener(), socket);
                         mLanSocket.setName(mName);
                         mLanSocket.init();
@@ -146,11 +141,12 @@ public class LanClient {
 
     private void sendVerificationEntity(){
 
-        VerificationEntity entity = new VerificationEntity();
+        ClientDeviceEntity entity = new ClientDeviceEntity();
         entity.setIp(mLocalIP);
         entity.setName(mName);
+        entity.setPort(mSocketPort);
         Gson gson = new Gson();
-        String json = gson.toJson(entity, VerificationEntity.class);
+        String json = gson.toJson(entity, ClientDeviceEntity.class);
         send(CmsgCode.CMSG_INTERNAL_VERIFICATION_CODE, json);
     }
 

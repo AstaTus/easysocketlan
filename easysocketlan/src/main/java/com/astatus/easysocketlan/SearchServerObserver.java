@@ -32,9 +32,6 @@ public class SearchServerObserver implements Observer<com.astatus.easysocketlan.
             case SS_SEARCH:
                 mListener.onSearching();
                 break;
-            case SS_END:
-                mListener.onSearchEnd();
-                break;
         }
     }
 
@@ -45,6 +42,6 @@ public class SearchServerObserver implements Observer<com.astatus.easysocketlan.
 
     @Override
     public void onComplete() {
-
+        mListener.onSearchEnd();
     }
 }

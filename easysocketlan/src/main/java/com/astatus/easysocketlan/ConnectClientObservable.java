@@ -30,6 +30,9 @@ public class ConnectClientObservable implements ObservableOnSubscribe<Socket> {
     @Override
     public void subscribe(ObservableEmitter<Socket> emitter) throws Exception {
         try{
+            mClientSocket.setTcpNoDelay(true);
+            mClientSocket.setKeepAlive(true);
+
             mClientSocket.connect(new InetSocketAddress(mServerEntity.ip, mServerEntity.port));
             emitter.onNext(mClientSocket);
             emitter.onComplete();
