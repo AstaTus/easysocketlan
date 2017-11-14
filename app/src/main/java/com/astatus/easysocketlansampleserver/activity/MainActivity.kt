@@ -3,10 +3,21 @@ package com.astatus.easysocketlansampleserver.activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.widget.Toast
 
 import com.astatus.easysocketlan.LanServer
+import com.astatus.easysocketlan.PacketHandler
+import com.astatus.easysocketlan.entity.ClientDeviceEntity
 import com.astatus.easysocketlan.listener.ILanServerListener
+import com.astatus.easysocketlansampleserver.BR
+//import com.astatus.easysocketlansampleserver.BR
+
+
 import com.astatus.easysocketlansampleserver.R
+import com.astatus.easysocketlansampleserver.adapter.GeneralListAdapter
+import com.astatus.easysocketlansampleserver.entity.ClientEntity
+import com.astatus.easysocketlansampleserver.lan.CmsgOpCode
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,77 +27,164 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var clientItemAdapter:
+    private lateinit var clientListAdapter: GeneralListAdapter<ClientEntity>
+    private var clients: ArrayList<ClientEntity> = ArrayList<ClientEntity>()
 
 
     private var lanServer: LanServer =
-            LanServer(LAN_SERVER_SEARCH_PORT, object :ILanServerListener{
-                override fun onReadError(p0: String?, p1: String?, p2: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onConnect(p0: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
+            LanServer(LAN_SERVER_SEARCH_PORT, LAN_SERVER_SOCKET_PORT, object :ILanServerListener{
                 override fun onSearchStart() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
 
-                override fun onWriteError(p0: String?, p1: String?, p2: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onVerification(p0: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onConnectStart() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    search_state_TV.setText(R.string.search_start)
+                    Toast.makeText(this@MainActivity, R.string.search_start, Toast.LENGTH_SHORT)
                 }
 
                 override fun onSearching() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onWriteStart(p0: String?, p1: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onRead(p0: String?, p1: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    Toast.makeText(this@MainActivity, R.string.searching_boradcast, Toast.LENGTH_SHORT)
                 }
 
                 override fun onSearchEnd() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    search_state_TV.setText(R.string.activity_main_search_running)
+                    Toast.makeText(this@MainActivity, R.string.search_finish, Toast.LENGTH_SHORT)
                 }
 
                 override fun onSearchError(p0: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    Toast.makeText(this@MainActivity, R.string.search_error, Toast.LENGTH_SHORT)
                 }
 
-                override fun onReadStart(p0: String?, p1: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                override fun onConnectStart() {
+
+                    link_state_TV.setText(R.string.activity_main_link_linking)
+
+
+                    Toast.makeText(this@MainActivity, R.string.connect_start, Toast.LENGTH_SHORT)
                 }
 
                 override fun onConnectError(p0: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+                    link_state_TV.setText(R.string.activity_main_link_unlink)
+
+                    Toast.makeText(this@MainActivity, R.string.connect_error, Toast.LENGTH_SHORT)
                 }
 
-                override fun onWrite(p0: String?, p1: String?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                override fun onConnect(p0: String?, p1: Int) {
+                    Toast.makeText(this@MainActivity, R.string.connecting_client, Toast.LENGTH_SHORT)
                 }
 
+                override fun onVerification(device: ClientDeviceEntity?) {
+
+                    if (device != null){
+                        var c = ClientEntity()
+
+                        c.address = device.ip + '_' + device.port.toString()
+                        c.name = device.name
+
+                        addClient(c)
+
+                        last_client_TV.setText(c.address + " connected");
+
+                        Toast.makeText(this@MainActivity, R.string.socket_verification, Toast.LENGTH_SHORT)
+                    }
+
+
+                }
+
+                override fun onWriteStart(p0: String?) {
+                    Toast.makeText(this@MainActivity, R.string.socket_write_start, Toast.LENGTH_SHORT)
+                }
+
+                override fun onWrite(p0: String?) {
+                    Toast.makeText(this@MainActivity, R.string.socket_on_writing, Toast.LENGTH_SHORT)
+                }
+
+                override fun onReadStart(p0: String?) {
+                    Toast.makeText(this@MainActivity, R.string.socket_read_start, Toast.LENGTH_SHORT)
+                }
+
+                override fun onRead(p0: String?) {
+                    Toast.makeText(this@MainActivity, R.string.socket_on_reading, Toast.LENGTH_SHORT)
+                }
+
+                override fun onDisconnect(id: String?, error: String?) {
+
+                    if (id != null){
+                        removeClient(id)
+
+                        last_client_TV.setText(id + " disconnected");
+
+                        Toast.makeText(this@MainActivity, R.string.socket_disconnected, Toast.LENGTH_SHORT)
+
+                    }
+                }
             })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        lanServer.start()
+        initView()
+        initLanServer()
     }
 
-    private fun initView(){
 
+    private fun initView(){
+        clientListAdapter = GeneralListAdapter<ClientEntity>(R.layout.widget_client_item, BR.client, clients)
+        recyclerView.adapter = clientListAdapter
+
+
+        search_BTN.setOnClickListener {
+            lanServer.search()
+        }
+
+    }
+
+    private fun initLanServer(){
+
+        lanServer.addHandler(object :PacketHandler<String>(CmsgOpCode.CMSG_MESSAGE, String::class.java){
+
+            override fun parserError(name: String, error: String?) {
+
+            }
+
+            override fun handle(id: String?, message: String?) {
+                if (id != null && message != null){
+
+                    addMessage(id, message)
+                }
+            }
+        })
+
+        lanServer.connect()
+    }
+
+    private fun addClient(c : ClientEntity){
+        clients.add(c)
+        clientListAdapter.notifyDataSetChanged()
+
+    }
+
+    private fun removeClient(id: String){
+        var c = getClient(id)
+        clients.remove(c)
+
+        clientListAdapter.notifyDataSetChanged()
+
+    }
+
+    private fun getClient(id: String): ClientEntity?{
+
+        for (c in clients){
+            if (c.address.equals(id)){
+                return c
+            }
+        }
+
+        return null
+    }
+
+    private fun addMessage(id: String, message: String){
+        var c = getClient(id)
+        if (c != null){
+            c.messages.add(message)
+        }
     }
 }

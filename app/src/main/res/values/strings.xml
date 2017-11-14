@@ -6,8 +6,8 @@
     <string name="activity_main_search_running">searching</string>
 
     <string name="activity_main_link_state">link state:</string>
-    <string name ="activity_main_link_unlink">unlink</string>
-    <string name ="activity_main_link_linking">linking</string>
+    <string name ="activity_main_link_unlink">unconnect</string>
+    <string name ="activity_main_link_linking">connect listening</string>
 
     <string name="activity_main_search_btn_text">search</string>
 
@@ -18,4 +18,21 @@
     <string name="widget_client_message">message:</string>
     <string name="widget_client_more_btn_text">more</string>
     <string name="wideget_client_send_btn_text">send</string>
+
+    <!--Toast message -->
+    <string name="search_start">start search</string>
+    <string name="searching_boradcast">searching boradcast</string>
+    <string name="search_finish">search finish</string>
+    <string name="search_error">search error</string>
+
+    <string name="connect_start">connect start</string>
+    <string name="connecting_client">one client connected</string>
+    <string name="connect_error">connect error</string>
+
+    <string name="socket_verification">socket verification</string>
+    <string name="socket_write_start">socket write start</string>
+    <string name="socket_on_writing">socket on writing</string>
+    <string name="socket_read_start">socket read start</string>
+    <string name="socket_on_reading">socket on reading</string>
+    <string name="socket_disconnected">socket disconnected</string>
 </resources>
