@@ -35,4 +35,8 @@
     <string name="socket_read_start">socket read start</string>
     <string name="socket_on_reading">socket on reading</string>
     <string name="socket_disconnected">socket disconnected</string>
+
+
+    <!--dailog message -->
+    <string name="dialog_send">send</string>
 </resources>
