@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="client"
-            type="com.astatus.easysocketlansampleserver.entity.ClientEntity"/>
+        <import type="com.astatus.easysocketlansampleserver.entity.ClientEntity" />
+        <import type="com.astatus.easysocketlansampleserver.activity.MainActivity.ClientItemHandler" />
+        <variable name="client" type="ClientEntity" />
+        <variable name="handler" type="ClientItemHandler" />
     </data>
 
     <android.support.constraint.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -52,34 +52,16 @@
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:text="@{client.address}"
             android:textColor="@color/common_text_gray"
             android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
-            app:layout_constraintStart_toEndOf="@+id/textView5" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/wideget_client_send_btn_text"
-            android:textColor="@color/common_text_white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/button3"
+            android:layout_marginEnd="8dp" />
 
         <TextView
             android:id="@+id/textView7"
@@ -96,27 +78,29 @@
 
         <TextView
             android:id="@+id/textView8"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="@{client.messages.get(client.messages.size - 1)}"
+            android:text="@{client.messages.get(client.messages.size - 1).message}"
             android:textColor="@color/common_text_gray"
             android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
-            app:layout_constraintStart_toEndOf="@+id/textView7" />
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginEnd="4dp"
             android:background="@color/colorPrimary"
+            android:onClick="@{handler.onMessageMoreClick}"
             android:text="@string/widget_client_more_btn_text"
             android:textColor="@color/common_text_white"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintEnd_toEndOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="@+id/textView8" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
     </android.support.constraint.ConstraintLayout>
 </layout>

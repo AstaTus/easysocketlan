@@ -1,8 +1,13 @@
 package com.astatus.easysocketlansampleserver.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.Toast
 
 import com.astatus.easysocketlan.LanServer
@@ -16,7 +21,10 @@ import com.astatus.easysocketlansampleserver.BR
 import com.astatus.easysocketlansampleserver.R
 import com.astatus.easysocketlansampleserver.adapter.GeneralListAdapter
 import com.astatus.easysocketlansampleserver.entity.ClientEntity
+import com.astatus.easysocketlansampleserver.entity.MessageEntity
+import com.astatus.easysocketlansampleserver.fragment.MessageDialogFragment
 import com.astatus.easysocketlansampleserver.lan.CmsgOpCode
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,10 +34,26 @@ class MainActivity : AppCompatActivity() {
         private val LAN_SERVER_SOCKET_PORT: Int = 10001
     }
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var clientListAdapter: GeneralListAdapter<ClientEntity>
     private var clients: ArrayList<ClientEntity> = ArrayList<ClientEntity>()
 
+    private var messageFragment: MessageDialogFragment? = null
+
+    private var mGson: Gson = Gson()
+
+    inner class ClientItemHandler{
+        public fun onMessageMoreClick(view: View) {
+
+            this@MainActivity.showDialogFragment()
+
+            if (messageFragment != null){
+                var entity = view.getTag() as ClientEntity
+                messageFragment!!.setClientEntity(entity)
+            }
+        }
+    }
+
+    private var clientItemHandler = ClientItemHandler()
 
     private var lanServer: LanServer =
             LanServer(LAN_SERVER_SEARCH_PORT, LAN_SERVER_SOCKET_PORT, object :ILanServerListener{
@@ -85,8 +109,6 @@ class MainActivity : AppCompatActivity() {
 
                         Toast.makeText(this@MainActivity, R.string.socket_verification, Toast.LENGTH_SHORT)
                     }
-
-
                 }
 
                 override fun onWriteStart(p0: String?) {
@@ -108,6 +130,12 @@ class MainActivity : AppCompatActivity() {
                 override fun onDisconnect(id: String?, error: String?) {
 
                     if (id != null){
+
+                        if (messageFragment != null && messageFragment!!.isVisible){
+                            messageFragment!!.onDisconnected(id!!)
+                        }
+
+
                         removeClient(id)
 
                         last_client_TV.setText(id + " disconnected");
@@ -125,11 +153,12 @@ class MainActivity : AppCompatActivity() {
         initLanServer()
     }
 
-
     private fun initView(){
-        clientListAdapter = GeneralListAdapter<ClientEntity>(R.layout.widget_client_item, BR.client, clients)
-        recyclerView.adapter = clientListAdapter
 
+        clientListAdapter = GeneralListAdapter<ClientEntity>(R.layout.widget_client_item, BR.client, clients,
+                BR.handler, clientItemHandler)
+
+        recyclerView.adapter = clientListAdapter
 
         search_BTN.setOnClickListener {
             lanServer.search()
@@ -156,10 +185,19 @@ class MainActivity : AppCompatActivity() {
         lanServer.connect()
     }
 
+
+    fun showDialogFragment() {
+        var fragment = supportFragmentManager.findFragmentByTag("dialogFragment")
+        if (fragment == null){
+            fragment = MessageDialogFragment()
+        }
+        messageFragment = fragment as MessageDialogFragment
+        messageFragment!!.show(supportFragmentManager, "dialogFragment")
+    }
+
     private fun addClient(c : ClientEntity){
         clients.add(c)
         clientListAdapter.notifyDataSetChanged()
-
     }
 
     private fun removeClient(id: String){
@@ -184,7 +222,24 @@ class MainActivity : AppCompatActivity() {
     private fun addMessage(id: String, message: String){
         var c = getClient(id)
         if (c != null){
-            c.messages.add(message)
+            c.messages.add(MessageEntity(0, message))
+        }
+
+        if (messageFragment != null && messageFragment!!.isVisible){
+            messageFragment!!.updateMessage()
+        }
+    }
+
+    public fun sendMessage(client: ClientEntity, messsage: String){
+
+        val json = mGson.toJson(messsage, String::class.java)
+
+        lanServer.send(client.address, CmsgOpCode.CMSG_MESSAGE, json)
+
+        client.messages.add(MessageEntity(1, messsage))
+
+        if (messageFragment != null && messageFragment!!.isVisible){
+            messageFragment!!.updateMessage()
         }
     }
 }

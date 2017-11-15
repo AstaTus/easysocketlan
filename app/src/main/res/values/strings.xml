@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">easysocketlansample</string>
 
+    <string name="common_close">close</string>
+
     <string name="activity_main_search_state">search state:</string>
     <string name="activity_main_search_stop">stop</string>
     <string name="activity_main_search_running">searching</string>

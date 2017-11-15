@@ -8,7 +8,7 @@ import java.util.ArrayList
 class ClientEntity {
     public var name: String = ""
     public var address: String = ""
-    public var messages = ArrayList<String>()
+    public var messages = ArrayList<MessageEntity>()
 
 
 //    public fun aaaa(){
