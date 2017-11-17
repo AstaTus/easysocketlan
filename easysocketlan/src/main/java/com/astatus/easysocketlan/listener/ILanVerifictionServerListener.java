@@ -7,5 +7,5 @@ import com.astatus.easysocketlan.entity.ClientDeviceEntity;
  */
 
 public interface ILanVerifictionServerListener {
-    void onVerification(ClientDeviceEntity entity);
+    void onVerification(ClientDeviceEntity entity, boolean isSuccess);
 }

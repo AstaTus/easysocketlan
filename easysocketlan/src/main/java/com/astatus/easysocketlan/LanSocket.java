@@ -61,7 +61,7 @@ public class LanSocket {
                     public void onNext(Packet packet) {
                         com.astatus.easysocketlan.PacketHandler handler = mHandlerMgr.getHandler(packet.getCode());
                         if (handler != null){
-                            handler.parser(getId(), packet);
+                            handler.parser(getId(), mName, packet);
                         }
                     }
 

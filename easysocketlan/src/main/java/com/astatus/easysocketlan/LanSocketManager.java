@@ -55,16 +55,17 @@ class LanSocketManager {
 
         mPacketHandlerManager.addHandler(
                 new PacketHandler<ClientDeviceEntity>(CmsgCode.CMSG_INTERNAL_VERIFICATION_CODE, ClientDeviceEntity.class) {
-            @Override
-            protected void parserError(String name, String message) {
+                    @Override
+                    protected void parserError(String id, String name, String message) {
 
-            }
+                    }
 
-            @Override
-            protected void handle(String name, ClientDeviceEntity entity) {
-                verificationLanSocket(entity);
-                mSocketServerListener.onVerification(entity);
-            }
+                    @Override
+                    protected void handle(String id, String name, ClientDeviceEntity entity) {
+                        boolean result = verificationLanSocket(entity);
+                        mSocketServerListener.onVerification(entity, result);
+                    }
+
         });
     }
 

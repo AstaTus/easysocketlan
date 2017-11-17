@@ -187,12 +187,11 @@ class MainActivity : AppCompatActivity() {
 
 
         lanClient.addHandler(object : PacketHandler<String>(SmsgOpCode.SMSG_MESSAGE_CODE, String::class.java){
-            override fun parserError(name: String?, message: String?) {
+            override fun parserError(id: String?, name: String?, message: String?) {
 
             }
 
-            override fun handle(name: String?, message: String?) {
-
+            override fun handle(id: String, name: String, message: String?) {
                 if (message != null){
                     addMessage(MESSAGE_SENDER_OTHER, message)
                 }

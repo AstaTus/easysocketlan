@@ -21,17 +21,17 @@ public abstract class PacketHandler<T> {
         mClass = cls;
     }
 
-    protected void parser(String id, Packet packet){
+    protected void parser(String id, String name, Packet packet){
         try {
 
             T entity = new Gson().fromJson(packet.getJson(), mClass);
-            handle(id, entity);
+            handle(id, name, entity);
         }catch (JsonSyntaxException e){
-            parserError(id, e.getMessage());
+            parserError(id, name, e.getMessage());
         }
     }
 
-    protected abstract void parserError(String id,String message);
+    protected abstract void parserError(String id, String name, String message);
 
-    protected abstract void handle(String id,T entity);
+    protected abstract void handle(String id, String name,T entity);
 }

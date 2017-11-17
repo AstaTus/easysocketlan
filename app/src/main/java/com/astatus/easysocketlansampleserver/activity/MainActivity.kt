@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
 
     private var lanServer: LanServer =
             LanServer(LAN_SERVER_SEARCH_PORT, LAN_SERVER_SOCKET_PORT, object :ILanServerListener{
+
+
                 override fun onSearchStart() {
 
                     search_state_TV.setText(R.string.search_start)
@@ -95,9 +97,8 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, R.string.connecting_client, Toast.LENGTH_SHORT).show()
                 }
 
-                override fun onVerification(device: ClientDeviceEntity?) {
-
-                    if (device != null){
+                override fun onVerification(device: ClientDeviceEntity?, isSuccess: Boolean) {
+                    if (device != null && isSuccess){
                         var c = ClientEntity()
 
                         c.address = device.ip + '_' + device.port.toString()
@@ -174,13 +175,12 @@ class MainActivity : AppCompatActivity() {
     private fun initLanServer(){
 
         lanServer.addHandler(object :PacketHandler<String>(CmsgOpCode.CMSG_MESSAGE_CODE, String::class.java){
-
-            override fun parserError(name: String, error: String?) {
+            override fun parserError(id: String?, name: String?, message: String?) {
 
             }
 
-            override fun handle(id: String?, message: String?) {
-                if (id != null && message != null){
+            override fun handle(id: String, name: String, message: String?) {
+                if (message != null){
 
                     addMessage(id, message)
                 }

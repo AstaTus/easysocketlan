@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Server:"
+            android:text="Other:"
             android:visibility="@{message.sender == 1 ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBaseline_toBaselineOf="@+id/message_TV"
             app:layout_constraintStart_toStartOf="parent" />
@@ -44,7 +44,7 @@
             android:id="@+id/client_name_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=":Client"
+            android:text=":Me"
             android:visibility="@{message.sender == 0 ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
