@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">EasySocketLanSampleClient</string>
+
+    <string name="common_start">start</string>
+    <string name="common_stop">stop</string>
+    <string name="common_send">send</string>
+
+    <string name="btn_search_text">start</string>
+    <string name="btn_connect_text">connect</string>
+    <string name="btn_reset_text">disconnect</string>
+
+
+    <string name="lan_search_stop">stop</string>
+    <string name="lan_search_running">searching</string>
+    <string name="lan_search_finded">search finded</string>
+    <string name="lan_search_error">search error</string>
+
+    <string name ="lan_link_unconnect">unconnect</string>
+    <string name ="lan_link_connect_start">connect start</string>
+    <string name ="lan_link_connected">connected</string>
+    <string name ="lan_link_connecting">connecting</string>
+    <string name ="lan_link_disconnect">disconnect</string>
+</resources>

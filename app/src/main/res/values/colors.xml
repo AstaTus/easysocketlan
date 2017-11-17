@@ -6,5 +6,5 @@
 
     <color name="common_text_black">#000000</color>
     <color name="common_text_white">#ffffff</color>
-    <color name="common_text_gray">#cccccc</color>
+    <color name="common_text_gray">#666666</color>
 </resources>

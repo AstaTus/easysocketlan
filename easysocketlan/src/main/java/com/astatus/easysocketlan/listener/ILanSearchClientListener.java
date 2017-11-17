@@ -7,7 +7,7 @@ package com.astatus.easysocketlan.listener;
 public interface ILanSearchClientListener {
     void onSearchStart();
 
-    void onFind();
+    void onSearchSuccess();
 
     void onSearchError(String error);
 }

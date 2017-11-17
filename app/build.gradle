@@ -36,8 +36,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
     //databidning
     kapt "com.android.databinding:compiler:3.0.0-alpha3"
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -48,9 +46,8 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     implementation 'com.android.support:multidex:1.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     //implementation files('E:/Android/github/easysocketlansample/libs/easysocketlan.jar')
-    //implementation files('libs/easysocketlan.jar')
+    implementation project(':easysocketlan')
 }

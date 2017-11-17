@@ -1,1 +1,1 @@
-include ':app', ':easysocketlan'
+include ':app', ':easysocketlan', ':easysocketlansamplerclient'

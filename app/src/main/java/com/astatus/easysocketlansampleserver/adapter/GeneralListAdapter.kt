@@ -17,8 +17,6 @@ class GeneralListAdapter<T>: RecyclerView.Adapter<GeneralListAdapter.GeneralView
 
     private var mDatas: List<T>
 
-
-
     private var mBrDataId: Int
 
     private var mBrHandlerId: Int?

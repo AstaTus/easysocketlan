@@ -75,7 +75,7 @@ public class LanClient {
                     @Override
                     public void onNext(ServerDeviceEntity serverDeviceEntity) {
                         mServerDeviceEntity = serverDeviceEntity;
-                        mLanClientListener.onFind();
+                        mLanClientListener.onSearchSuccess();
                         connect();
 
                     }
@@ -91,6 +91,11 @@ public class LanClient {
                     }
                 });
 
+    }
+
+    public void stop(){
+        destroySearch();
+        destroyConnect();
     }
 
     class LanSocketDisconnectListener implements ILanSocketDisconnectListener{
@@ -118,13 +123,15 @@ public class LanClient {
                     @Override
                     public void onNext(Socket socket) {
 
-                        mLanClientListener.onConnectting();
+
                         mLocalIP = socket.getLocalAddress().getHostAddress();
                         mSocketPort = socket.getLocalPort();
                         mLanSocket = new LanSocket(mPcketHandlerManager, mLanClientListener, new LanSocketDisconnectListener(), socket);
                         mLanSocket.setName(mName);
                         mLanSocket.init();
                         sendVerificationEntity();
+
+                        mLanClientListener.onConnected(mLocalIP + '_' + mSocketPort);
                     }
 
                     @Override
@@ -156,9 +163,7 @@ public class LanClient {
     }
 
     public void destroy(){
-        destroySearch();
-        destroyConnect();
-        destorySocket();
+        stop();
 
         mLanClientListener = null;
     }
@@ -171,13 +176,12 @@ public class LanClient {
     }
 
     private void destroyConnect(){
+
         if (mConnectObservalbe != null){
             mConnectObservalbe.unsubscribeOn(Schedulers.io());
             mConnectObservalbe = null;
         }
-    }
 
-    private void destorySocket(){
         if (mLanSocket != null){
             mLanSocket.destroy();
             mLanSocket = null;

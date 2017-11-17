@@ -8,6 +8,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/common_text_white"
         android:orientation="vertical">
 
         <TextView
@@ -52,7 +53,6 @@
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@+id/chat_ET"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.46"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/address_TV" />
 
@@ -62,25 +62,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:imeOptions="actionSend"
             android:inputType="textPersonName"
             android:text="Name"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/send_BTN"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/chat_list_RV"
-            app:layout_constraintTop_toBottomOf="@+id/chat_list_RV" />
-
-        <Button
-            android:id="@+id/send_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_send"
-            app:layout_constraintBaseline_toBaselineOf="@+id/chat_ET"
-            app:layout_constraintEnd_toEndOf="@+id/chat_list_RV" />
-
+            app:layout_constraintTop_toBottomOf="@+id/chat_list_RV"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp" />
 
     </android.support.constraint.ConstraintLayout>
 

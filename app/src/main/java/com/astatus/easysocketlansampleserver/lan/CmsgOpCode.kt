@@ -5,5 +5,5 @@ package com.astatus.easysocketlansampleserver.lan
  */
 object CmsgOpCode {
 
-    val CMSG_MESSAGE: Int = 10000
+    val CMSG_MESSAGE_CODE: Int = 3000
 }

@@ -10,5 +10,5 @@ public interface ILanConnectClientListener {
 
     void onConnectError(String error);
 
-    void onConnectting();
+    void onConnected(String id);
 }

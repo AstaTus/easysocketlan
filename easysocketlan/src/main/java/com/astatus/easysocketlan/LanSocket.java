@@ -30,7 +30,6 @@ public class LanSocket {
 
     private String mName = "";
 
-    private String mId = "";
 
     private LinkedBlockingQueue<Packet> mWaitPackets = new LinkedBlockingQueue<>(100);;
 
@@ -62,7 +61,7 @@ public class LanSocket {
                     public void onNext(Packet packet) {
                         com.astatus.easysocketlan.PacketHandler handler = mHandlerMgr.getHandler(packet.getCode());
                         if (handler != null){
-                            handler.parser(mName, packet);
+                            handler.parser(getId(), packet);
                         }
                     }
 
@@ -135,6 +134,10 @@ public class LanSocket {
 
     public void setName(String name){
         mName = name;
+    }
+
+    public String getName(){
+        return mName;
     }
 
     public boolean send(Packet packet){
