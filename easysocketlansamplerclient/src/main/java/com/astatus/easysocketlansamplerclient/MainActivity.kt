@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +15,9 @@ import com.astatus.easysocketlansampleserver.entity.MessageEntity
 import com.astatus.easysocketlansampleserver.lan.SmsgOpCode
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.MenuInflater
+import android.view.MenuItem
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -108,6 +112,32 @@ class MainActivity : AppCompatActivity() {
         messages.add(entity)
 
         messageAdapter.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
+
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_actionbar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        if (item != null){
+            when(item.itemId){
+
+                R.id.action_bar_info->{
+
+                }
+                R.id.action_bar_lan->{
+
+                }
+            }
+        }
+
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initLanClient(){

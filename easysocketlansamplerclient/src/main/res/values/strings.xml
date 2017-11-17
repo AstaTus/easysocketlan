@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EasySocketLanSampleClient</string>
+    <string name="app_name">CLIENT</string>
 
     <string name="common_start">start</string>
     <string name="common_stop">stop</string>
@@ -20,4 +20,7 @@
     <string name ="lan_link_connected">connected</string>
     <string name ="lan_link_connecting">connecting</string>
     <string name ="lan_link_disconnect">disconnect</string>
+
+    <string name="actionbar_info">info</string>
+    <string name="actionbar_lan">lan</string>
 </resources>

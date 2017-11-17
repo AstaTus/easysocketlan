@@ -120,7 +120,7 @@ class MessageDialogFragment(): DialogFragment() {
     public fun updateMessage(){
 
         if (messageListAdapter != null){
-            messageListAdapter!!.notifyItemChanged(messageListAdapter!!.itemCount - 1)
+            messageListAdapter!!.notifyDataSetChanged()
         }
     }
 
