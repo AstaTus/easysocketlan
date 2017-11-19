@@ -9,10 +9,12 @@ android {
 
     defaultConfig {
         applicationId "com.astatus.easysocketlansamplerclient"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -48,4 +50,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation project(':easysocketlan')
+    implementation 'com.android.support:multidex:1.0.1'
 }

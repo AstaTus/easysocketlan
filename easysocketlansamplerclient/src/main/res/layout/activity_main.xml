@@ -9,37 +9,17 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/address_TV"
-            android:layout_width="0dp"
+            android:id="@+id/lan_state_TV"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:text=""
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/name_TV"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="24dp"
-            android:text=""
-            app:layout_constraintBaseline_toBaselineOf="@+id/address_TV"
-            app:layout_constraintStart_toEndOf="@+id/address_TV" />
-
-        <Button
-            android:id="@+id/lan_BTN"
-            android:layout_width="84dp"
-            android:layout_height="32dp"
-            android:text="@string/common_start"
-            android:textSize="8sp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/lan_search_stop"
+            android:textSize="24sp"
+            android:textColor="@color/common_white"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toTopOf="@+id/name_TV"
-            android:layout_marginTop="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/name_TV" />
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/chat_list_RV"
@@ -53,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.46"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/lan_state_TV" />
 
         <EditText
             android:id="@+id/chat_ET"
@@ -73,16 +53,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" />
 
-        <TextView
-            android:id="@+id/lan_state_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            app:layout_constraintEnd_toStartOf="@+id/lan_BTN"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toTopOf="@+id/lan_BTN"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/lan_BTN"
-            android:layout_marginBottom="8dp" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

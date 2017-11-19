@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     private var messages: ArrayList<MessageEntity> = ArrayList<MessageEntity>()
 
+    private var address: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,21 +65,6 @@ class MainActivity : AppCompatActivity() {
 
         chat_list_RV.adapter = messageAdapter
 
-        lan_BTN.setText(R.string.btn_search_text)
-        lan_BTN.isEnabled = true
-        lan_BTN.setOnClickListener {
-
-            if(lanState.equals(LAN_SEARCH_STATE)){
-                lan_BTN.isEnabled = false
-                lanClient.start()
-            }else if (lanState.equals(LAN_CONNECT_STATE)){
-                lan_BTN.isEnabled = false
-                lanClient.connect()
-            }else if (lanState.equals(LAN_DISCONNECT_STATE)){
-                lan_BTN.isEnabled = true
-                lanClient.stop()
-            }
-        }
 
         chat_ET.setOnEditorActionListener(object :TextView.OnEditorActionListener {
 
@@ -101,10 +88,6 @@ class MainActivity : AppCompatActivity() {
                 return true;
             }
         })
-
-
-        name_TV.setText(CLIENT_NAME)
-
     }
 
     private fun addMessage(sender: Int, message: String){
@@ -115,11 +98,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
+
 
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_actionbar, menu)
         return super.onCreateOptionsMenu(menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+
+        if (menu != null){
+            when(lanState){
+                LAN_SEARCH_STATE->{
+
+                    menu.findItem(R.id.action_bar_lan_start)?.setVisible(true)
+                    menu.findItem(R.id.action_bar_lan_connect)?.setVisible(false)
+                    menu.findItem(R.id.action_bar_lan_disconnect)?.setVisible(false)
+                }
+                LAN_CONNECT_STATE->{
+                    menu.findItem(R.id.action_bar_lan_start)?.setVisible(false)
+                    menu.findItem(R.id.action_bar_lan_connect)?.setVisible(true)
+                    menu.findItem(R.id.action_bar_lan_disconnect)?.setVisible(false)
+                }
+                LAN_DISCONNECT_STATE->{
+                    menu.findItem(R.id.action_bar_lan_start)?.setVisible(false)
+                    menu.findItem(R.id.action_bar_lan_connect)?.setVisible(false)
+                    menu.findItem(R.id.action_bar_lan_disconnect)?.setVisible(true)
+                }
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -130,8 +141,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_bar_info->{
 
                 }
-                R.id.action_bar_lan->{
-
+                R.id.action_bar_lan_start->{
+                    lanClient.start()
+                }
+                R.id.action_bar_lan_connect->{
+                    lanClient.connect()
+                }
+                R.id.action_bar_lan_disconnect->{
+                    lanClient.stop()
                 }
             }
         }
@@ -152,15 +169,13 @@ class MainActivity : AppCompatActivity() {
                 lan_state_TV.setText(R.string.lan_search_finded)
 
                 lanState = LAN_CONNECT_STATE
-                lan_BTN.setText(R.string.btn_connect_text)
+                lan_state_TV.setText(R.string.btn_connect_text)
             }
 
             override fun onSearchError(error: String?) {
 
                 lan_state_TV.setText(R.string.lan_search_stop)
                 lanState = LAN_SEARCH_STATE
-                lan_BTN.isEnabled = true
-                lan_BTN.setText(R.string.btn_search_text)
 
                 Toast.makeText(this@MainActivity, "onSearchError:" + error!!, Toast.LENGTH_SHORT).show()
             }
@@ -173,12 +188,10 @@ class MainActivity : AppCompatActivity() {
             override fun onConnected(id: String) {
                 lan_state_TV.setText(R.string.lan_link_connecting)
 
-                address_TV.setText(id)
-
+                address = id
 
                 lanState = LAN_DISCONNECT_STATE
-                lan_BTN.setText(R.string.btn_reset_text)
-                lan_BTN.isEnabled = true
+                lan_state_TV.setText(R.string.btn_reset_text)
 
             }
 
@@ -186,7 +199,6 @@ class MainActivity : AppCompatActivity() {
 
                 lan_state_TV.setText(R.string.lan_link_disconnect)
 
-                lan_BTN.isEnabled = true
 
                 Toast.makeText(this@MainActivity, "onConnectError:" + error!!, Toast.LENGTH_SHORT).show()
 
@@ -206,8 +218,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onDisconnect(id: String?, error: String?) {
                 lan_state_TV.setText(R.string.lan_link_disconnect)
-                lan_BTN.setText(R.string.btn_search_text)
-                lan_BTN.isEnabled = true
+
                 lanState = LAN_SEARCH_STATE
 
                 Toast.makeText(this@MainActivity, "onDisconnect:" + error, Toast.LENGTH_SHORT).show()
