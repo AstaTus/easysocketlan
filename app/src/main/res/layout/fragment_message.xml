@@ -5,43 +5,21 @@
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/common_text_white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/address_TV"
-            android:layout_width="0dp"
+            android:id="@+id/lan_state_TV"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/name_TV"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:text="TextView"
-            app:layout_constraintBaseline_toBaselineOf="@+id/address_TV"
-            app:layout_constraintStart_toEndOf="@+id/address_TV" />
-
-        <Button
-            android:id="@+id/close_BTN"
-            android:layout_width="84dp"
-            android:layout_height="32dp"
-            android:text="@string/common_close"
-            android:textSize="8sp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/socket_lan_connected"
+            android:textSize="24sp"
+            android:textColor="@color/common_white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@+id/name_TV"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="32dp"/>
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/chat_list_RV"
@@ -53,8 +31,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@+id/chat_ET"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.46"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/lan_state_TV" />
 
         <EditText
             android:id="@+id/chat_ET"
@@ -66,14 +45,13 @@
             android:ems="10"
             android:imeOptions="actionSend"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/chat_list_RV"
             app:layout_constraintTop_toBottomOf="@+id/chat_list_RV"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" />
-
     </android.support.constraint.ConstraintLayout>
 
 </layout>

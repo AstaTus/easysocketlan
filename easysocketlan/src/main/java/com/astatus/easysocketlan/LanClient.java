@@ -102,7 +102,7 @@ public class LanClient {
 
         @Override
         public void onDisconnect(String id) {
-            destroyConnect();
+//            destroyConnect();
         }
     }
 

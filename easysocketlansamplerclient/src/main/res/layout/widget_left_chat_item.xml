@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.view.Gravity"/>
+        <import type="com.astatus.easysocketlansamplerclient.MessageEntity"></import>
+        <variable
+            name="left_chat_message"
+            type="com.astatus.easysocketlansamplerclient.MessageEntity"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/other_name_IV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_cloud_circle_black_36dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+        <!--@{message.message}-->
+
+        <TextView
+            android:id="@+id/message_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/other_name_IV"
+            android:layout_toRightOf="@+id/other_name_IV"
+            android:background="@drawable/cloud_chat_item_shape"
+            android:gravity="left|center_vertical"
+
+            android:paddingBottom="5dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
+            android:paddingTop="6dp"
+
+            android:layout_marginEnd="36dp"
+
+            android:text="@{left_chat_message.message}"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <!--
+    <android.support.constraint.ConstraintLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/other_name_IV"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:src="@drawable/ic_cloud_circle_black_36dp"-->
+            <!--android:visibility="@{message.sender == 1 ? View.VISIBLE : View.INVISIBLE}"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintVertical_bias="0.0" />-->
+
+        <!--&lt;!&ndash;android:gravity="@{message.sender == 1 ? Gravity.LEFT : Gravity.RIGHT}"-->
+<!--@{message.message}-->
+        <!--&ndash;&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/message_TV"-->
+            <!--android:layout_height="wrap_content"-->
+
+            <!--android:layout_marginEnd="32dp"-->
+
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:background="@drawable/local_chat_item_shape"-->
+            <!--android:gravity="left"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:paddingEnd="4dp"-->
+            <!--android:paddingStart="4dp"-->
+            <!--android:paddingTop="4dp"-->
+            <!--android:singleLine="false"-->
+            <!--android:text="dfdsfssssssdfdsfssvgdjsfs"-->
+            <!--android:textSize="18sp"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/self_name_IV"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/other_name_IV"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/other_name_IV" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/self_name_IV"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:src="@drawable/ic_account_circle_black_36dp"-->
+            <!--android:visibility="@{message.sender == 0 ? View.VISIBLE : View.INVISIBLE}"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/other_name_IV"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/other_name_IV" />-->
+    <!--</android.support.constraint.ConstraintLayout>-->
+</layout>

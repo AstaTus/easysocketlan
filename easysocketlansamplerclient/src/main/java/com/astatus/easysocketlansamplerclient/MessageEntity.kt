@@ -1,4 +1,4 @@
-package com.astatus.easysocketlansampleserver.entity
+package com.astatus.easysocketlansamplerclient
 
 /**
  * Created by Administrator on 2017/11/15.

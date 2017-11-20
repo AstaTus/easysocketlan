@@ -3,13 +3,20 @@
 
     <string name="common_close">close</string>
 
+    <string name="common_hint">hint</string>
+
+    <string name="lan_connect_error">LAN DISCONNECT! PLEASE CHECK LAN SETTING</string>
+
+    <string name="socket_lan_connected">connected</string>
+    <string name="socket_lan_disconnected">disconnected</string>
+
     <string name="activity_main_search_state">search state:</string>
     <string name="activity_main_search_stop">stop</string>
     <string name="activity_main_search_running">searching</string>
 
     <string name="activity_main_link_state">link state:</string>
-    <string name ="activity_main_link_unlink">unconnect</string>
-    <string name ="activity_main_link_linking">connect listening</string>
+    <string name="activity_main_link_unlink">unconnect</string>
+    <string name="activity_main_link_linking">connect listening</string>
 
     <string name="activity_main_search_btn_text">search</string>
 
@@ -41,4 +48,11 @@
 
     <!--dailog message -->
     <string name="dialog_send">send</string>
+
+
+    <!--actionbar-->
+    <string name="actionbar_search">search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

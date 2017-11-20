@@ -11,11 +11,9 @@ import android.widget.Toast
 import com.astatus.easysocketlan.LanClient
 import com.astatus.easysocketlan.PacketHandler
 import com.astatus.easysocketlan.listener.ILanClientListener
-import com.astatus.easysocketlansampleserver.entity.MessageEntity
 import com.astatus.easysocketlansampleserver.lan.SmsgOpCode
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.MenuInflater
 import android.view.MenuItem
 
 
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var lanClient: LanClient
 
-    private lateinit var messageAdapter: GeneralListAdapter<MessageEntity>
+    private lateinit var messageAdapter: MessageListAdapter
 
     private var messages: ArrayList<MessageEntity> = ArrayList<MessageEntity>()
 
@@ -57,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView(){
         messageAdapter =
-                GeneralListAdapter<MessageEntity>(R.layout.widget_chat_item, BR.message, messages)
+                MessageListAdapter(messages)
 
         var layoutManager = LinearLayoutManager(this);
         chat_list_RV.setLayoutManager(layoutManager)
@@ -88,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                 return true;
             }
         })
+        chat_ET.isEnabled = false
     }
 
     private fun addMessage(sender: Int, message: String){
@@ -149,6 +148,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.action_bar_lan_disconnect->{
                     lanClient.stop()
+                    lanState = LAN_CONNECT_STATE
+                    chat_ET.isEnabled = false
                 }
             }
         }
@@ -169,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 lan_state_TV.setText(R.string.lan_search_finded)
 
                 lanState = LAN_CONNECT_STATE
+                chat_ET.isEnabled = false
                 lan_state_TV.setText(R.string.btn_connect_text)
             }
 
@@ -176,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 
                 lan_state_TV.setText(R.string.lan_search_stop)
                 lanState = LAN_SEARCH_STATE
-
+                chat_ET.isEnabled = false
                 Toast.makeText(this@MainActivity, "onSearchError:" + error!!, Toast.LENGTH_SHORT).show()
             }
 
@@ -186,13 +188,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onConnected(id: String) {
-                lan_state_TV.setText(R.string.lan_link_connecting)
-
                 address = id
 
                 lanState = LAN_DISCONNECT_STATE
-                lan_state_TV.setText(R.string.btn_reset_text)
-
+                chat_ET.isEnabled = true
+                lan_state_TV.setText(R.string.lan_link_connected)
             }
 
             override fun onConnectError(error: String?) {
@@ -219,8 +219,8 @@ class MainActivity : AppCompatActivity() {
             override fun onDisconnect(id: String?, error: String?) {
                 lan_state_TV.setText(R.string.lan_link_disconnect)
 
-                lanState = LAN_SEARCH_STATE
-
+                lanState = LAN_CONNECT_STATE
+                chat_ET.isEnabled = false
                 Toast.makeText(this@MainActivity, "onDisconnect:" + error, Toast.LENGTH_SHORT).show()
 
             }

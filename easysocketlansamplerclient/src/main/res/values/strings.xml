@@ -24,6 +24,6 @@
     <string name="actionbar_info">info</string>
     <string name="actionbar_lan_start">start</string>
     <string name="actionbar_lan_connect">connect</string>
-    <string name="actionbar_lan_disconnect">connect</string>
+    <string name="actionbar_lan_disconnect">disconnect</string>
 
 </resources>
