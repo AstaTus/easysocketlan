@@ -1,5 +1,7 @@
 package com.astatus.easysocketlan;
 
+import android.util.Log;
+
 import com.astatus.easysocketlan.entity.ServerDeviceEntity;
 import com.astatus.easysocketlan.entity.ClientDeviceEntity;
 import com.astatus.easysocketlan.listener.ILanClientListener;
@@ -7,12 +9,16 @@ import com.astatus.easysocketlan.listener.ILanSocketDisconnectListener;
 import com.google.gson.Gson;
 
 import java.net.Socket;
+import java.util.function.Consumer;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/10/20.
@@ -40,7 +46,7 @@ public class LanClient {
 
     private ServerDeviceEntity mServerDeviceEntity = null;
 
-    public LanClient(String name, int searchPort, ILanClientListener listener){
+    public LanClient(String name, int searchPort, ILanClientListener listener) {
 
         mName = name;
 
@@ -49,6 +55,14 @@ public class LanClient {
         mLanClientListener = listener;
 
         mPcketHandlerManager = new PacketHandlerManager();
+
+        RxJavaPlugins.setErrorHandler(new io.reactivex.functions.Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.d("LanClient", "accept: ");
+            }
+        });
+
     }
 
     public void addHandler(com.astatus.easysocketlan.PacketHandler handler){

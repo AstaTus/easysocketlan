@@ -7,6 +7,8 @@
 
     <string name="lan_connect_error">LAN DISCONNECT! PLEASE CHECK LAN SETTING</string>
 
+    <string name="lan_connect_close">PRESS OK TO CLOSE SERVER!</string>
+
     <string name="socket_lan_connected">connected</string>
     <string name="socket_lan_disconnected">disconnected</string>
 
@@ -52,6 +54,7 @@
 
     <!--actionbar-->
     <string name="actionbar_search">search</string>
+    <string name="actionbar_connect">connect</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

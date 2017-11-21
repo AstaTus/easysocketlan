@@ -20,9 +20,6 @@ import io.reactivex.schedulers.Schedulers;
 public class LanSocket {
     private PacketHandlerManager mHandlerMgr;
 
-    private Observable<Packet> mReadObservale;
-    private Observable<Integer> mWriteObservale;
-
     private Disposable mReadDisposable;
     private Disposable mWriteDisposable;
 
@@ -57,10 +54,10 @@ public class LanSocket {
     public void init(){
 
         //read thread
-        mReadObservale = Observable.create(new SocketReadObservable(mSocket));
-        mReadObservale.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        Observable<Packet> read_observable = Observable.create(new SocketReadObservable(mSocket));
+        read_observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Packet>(){
 
                     @Override
@@ -96,10 +93,10 @@ public class LanSocket {
 
 
         //write thread
-        mWriteObservale = Observable.create(new SocketWriteObservable(mSocket, mWaitPackets));
-        mWriteObservale.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        Observable<Integer> write_observable = Observable.create(new SocketWriteObservable(mSocket, mWaitPackets));
+        write_observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Integer>(){
 
                     @Override
@@ -153,25 +150,15 @@ public class LanSocket {
 
         }
 
-//        if (mReadDisposable != null){
-//            mReadDisposable.dispose();
-//            mReadDisposable = null;
-//        }
-//
-//        if (mWriteDisposable != null){
-//            mWriteDisposable.dispose();
-//            mWriteDisposable = null;
-//        }
+        if (mReadDisposable != null){
+            mReadDisposable.dispose();
+            mReadDisposable = null;
+        }
 
-//        if (mSocketListener != null){
-//            //mSocketListener.onDisconnect(getId(), "");
-//            mSocketListener = null;
-//        }
-//
-//        if (mDisconnectListener != null){
-//            //mDisconnectListener.onDisconnect(getId());
-//            mDisconnectListener = null;
-//        }
+        if (mWriteDisposable != null){
+            mWriteDisposable.dispose();
+            mWriteDisposable = null;
+        }
 
         mHandlerMgr = null;
     }

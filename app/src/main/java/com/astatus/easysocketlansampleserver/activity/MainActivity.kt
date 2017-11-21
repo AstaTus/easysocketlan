@@ -185,6 +185,24 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onBackPressed() {
+
+        if (messageFragment.isVisible){
+            changeClientListFragment()
+        }else if (clientListFragment.isVisible){
+            val builder = AlertDialog.Builder(this@MainActivity)
+            builder.setTitle(this@MainActivity.getString(R.string.common_hint))
+            builder.setMessage(this@MainActivity.getString(R.string.lan_connect_close))
+
+            builder.setPositiveButton("ok",
+                    DialogInterface.OnClickListener { dialogInterface, i -> lanServer.stop(); })
+
+            val dialog = builder.create()
+            dialog.show()
+        }
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
         if (item != null){
@@ -227,7 +245,6 @@ class MainActivity : AppCompatActivity() {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.FrameLayout, messageFragment).commit();
-
 
     }
 

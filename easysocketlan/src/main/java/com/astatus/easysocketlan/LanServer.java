@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.astatus.easysocketlan.listener.ILanServerListener;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -26,9 +29,9 @@ public class LanServer {
 
     private ILanServerListener mLanServerListener;
 
-    private Observable mSearchObservalble;
+    private ServerSocket mServerSocket = null;
 
-    private Observable mConnectObservalble;
+    private Disposable mConnectDisposable;
 
     private LanSocketManager mLanSocketMgr;
 
@@ -43,6 +46,13 @@ public class LanServer {
         mPcketHandlerManager = new PacketHandlerManager();
 
         mLanSocketMgr = new LanSocketManager(mPcketHandlerManager, mLanServerListener);
+
+        RxJavaPlugins.setErrorHandler(new io.reactivex.functions.Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.d("LanServer", "accept: ");
+            }
+        });
     }
 
     public void send(String id, int code, String json){
@@ -69,12 +79,19 @@ public class LanServer {
         search();
     }
 
+    public void stop(){
+        destroySearch();
+        destroyConnect();
+        mLanSocketMgr.closeAllSocket();
+    }
+
     public void search(){
 
         destroySearch();
 
-        mSearchObservalble = Observable.create(new SearchServerObservable(mSearchPort, mSocketPort));
-        mSearchObservalble.subscribeOn(Schedulers.io())
+        Observable search_observable = Observable.create(new SearchServerObservable(mSearchPort, mSocketPort));
+        search_observable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SearchServerObserver(mLanServerListener));
 
@@ -84,52 +101,58 @@ public class LanServer {
 
         destroyConnect();
 
-        mConnectObservalble = Observable.create(new ConnectServerObservable(mSocketPort));
-        mConnectObservalble.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Socket>(){
+        try {
+            mServerSocket = new ServerSocket(mSocketPort);
 
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mLanServerListener.onConnectStart();
-                    }
+            Observable connect_observable = Observable.create(new ConnectServerObservable(mServerSocket));
+            connect_observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Socket>(){
 
-                    @Override
-                    public void onNext(Socket socket) {
-                        mLanServerListener.onConnect(socket.getInetAddress().getHostAddress(), socket.getPort());
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            mConnectDisposable = d;
+                            mLanServerListener.onConnectStart();
+                        }
 
-                        mLanSocketMgr.addLanSocket(socket);
-                    }
+                        @Override
+                        public void onNext(Socket socket) {
+                            mLanServerListener.onConnect(socket.getInetAddress().getHostAddress(), socket.getPort());
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mLanServerListener.onConnectError(e.getMessage());
-                    }
+                            mLanSocketMgr.addLanSocket(socket);
+                        }
 
-                    @Override
-                    public void onComplete() {
+                        @Override
+                        public void onError(Throwable e) {
+                            mLanServerListener.onConnectError(e.getMessage());
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+
+        }catch (IOException e){
+            mLanServerListener.onConnectError(e.getMessage());
+        }
+
+
     }
 
     public void destroy(){
-        destroySearch();
-        destroyConnect();
+        stop();
         mLanServerListener = null;
     }
 
     private void destroySearch(){
-        if (mSearchObservalble != null){
-            mSearchObservalble.unsubscribeOn(Schedulers.io());
-            mSearchObservalble = null;
-        }
+
     }
 
     private void destroyConnect(){
-        if (mConnectObservalble != null){
-            mConnectObservalble.unsubscribeOn(Schedulers.io());
-            mConnectObservalble = null;
+        if (mConnectDisposable != null){
+            mConnectDisposable.dispose();
+            mConnectDisposable = null;
         }
     }
 }

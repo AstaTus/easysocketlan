@@ -103,4 +103,18 @@ class LanSocketManager {
 
         return false;
     }
+
+    public void  closeAllSocket(){
+        for (LanSocket lan: mUnverificationLanSockets.values()){
+            lan.destroy();
+        }
+
+        for (LanSocket lan: mVerificationLanSockets.values()){
+            lan.destroy();
+        }
+
+        mUnverificationLanSockets.clear();
+        mVerificationLanSockets.clear();
+
+    }
 }

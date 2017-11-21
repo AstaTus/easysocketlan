@@ -16,20 +16,17 @@ import io.reactivex.ObservableOnSubscribe;
 public class ConnectServerObservable implements ObservableOnSubscribe<Socket> {
 
     private ServerSocket mServerSocket;
-    private int mPort;
 
-    ConnectServerObservable(int port){
-        mPort = port;
+    ConnectServerObservable(ServerSocket socket){
+        mServerSocket = socket;
     }
 
     @Override
     public void subscribe(ObservableEmitter<Socket> emitter) throws Exception {
 
         try{
-            mServerSocket = new ServerSocket(mPort);
-            String localIP = mServerSocket.getInetAddress().getHostAddress();
-            Log.d("ConnectServerObservable", localIP);
-            while (true){
+
+            while (!emitter.isDisposed()){
 
                 Socket socket = mServerSocket.accept();
 
@@ -38,6 +35,7 @@ public class ConnectServerObservable implements ObservableOnSubscribe<Socket> {
 
                 emitter.onNext(socket);
             }
+
         }catch (IOException e){
             emitter.onError(e);
         }
