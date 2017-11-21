@@ -5,6 +5,8 @@
 
     <string name="common_hint">hint</string>
 
+    <string name="dialog_close">colse app?</string>
+
     <string name="lan_connect_error">LAN DISCONNECT! PLEASE CHECK LAN SETTING</string>
 
     <string name="lan_connect_close">PRESS OK TO CLOSE SERVER!</string>

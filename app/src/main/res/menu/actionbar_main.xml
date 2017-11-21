@@ -6,8 +6,8 @@
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/actionbar_search"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/action_bar_connect"
-        android:title="@string/actionbar_connect"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/action_bar_connect"-->
+        <!--android:title="@string/actionbar_connect"-->
+        <!--app:showAsAction="never"/>-->
 </menu>

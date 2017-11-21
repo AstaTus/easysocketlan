@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                     builder.setTitle(this@MainActivity.getString(R.string.common_hint))
                     builder.setMessage(this@MainActivity.getString(R.string.lan_connect_error))
 
-                    builder.setPositiveButton("确定",
+                    builder.setPositiveButton("ok",
                             DialogInterface.OnClickListener { dialogInterface, i -> finish(); })
 
                     val dialog = builder.create()
@@ -192,15 +192,17 @@ class MainActivity : AppCompatActivity() {
         }else if (clientListFragment.isVisible){
             val builder = AlertDialog.Builder(this@MainActivity)
             builder.setTitle(this@MainActivity.getString(R.string.common_hint))
-            builder.setMessage(this@MainActivity.getString(R.string.lan_connect_close))
+            builder.setMessage(this@MainActivity.getString(R.string.dialog_close))
 
             builder.setPositiveButton("ok",
-                    DialogInterface.OnClickListener { dialogInterface, i -> lanServer.stop(); })
+                    DialogInterface.OnClickListener { dialogInterface, i -> finish(); })
+
+            builder.setNegativeButton("cancel",
+                    DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss();  })
 
             val dialog = builder.create()
             dialog.show()
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
