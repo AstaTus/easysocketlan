@@ -9,7 +9,6 @@ import com.astatus.easysocketlan.listener.ILanSocketDisconnectListener;
 import com.google.gson.Gson;
 
 import java.net.Socket;
-import java.util.function.Consumer;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -18,7 +17,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/10/20.

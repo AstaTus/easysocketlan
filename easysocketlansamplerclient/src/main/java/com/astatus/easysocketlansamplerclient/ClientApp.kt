@@ -1,12 +1,14 @@
 package com.astatus.easysocketlansamplerclient
 
 import android.app.Application
+import android.content.Context
+import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 
 /**
  * Created by Administrator on 2017/11/16.
  */
-class ClientApp: MultiDexApplication() {
+class ClientApp: Application() {
 
     companion object {
         private var sSingleton: ClientApp? = null
@@ -26,6 +28,11 @@ class ClientApp: MultiDexApplication() {
         sSingleton = this
 
         initCrashHandler()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this);
     }
 
 
