@@ -1,7 +1,7 @@
 # EasySocketLan
 
 
-EasySocketLan is Android library, this library used for connect the android devices in the LAN(Local Area Network) through the sockets, send and receive messages to each other, encapsulating the server, client, and message protocols.
+EasySocketLan is Android library, this library used for android devices communicated with each other in the LAN(Local Area Network) through the sockets, all devices can send and receive messages. encapsulating the server, client, and message protocols.
 
 
 
@@ -36,6 +36,7 @@ dependencies {
 
 
 ## Useage
+the demo and useage code write by kotlin language
 
 ### client
 
@@ -88,7 +89,7 @@ lanClient = LanClient(CLIENT_NAME, LAN_SEARCH_PORT, object :ILanClientListener{
     }
 })
 
-lanClient.addHandler(
+var lanClient.addHandler(
 	object : PacketHandler<String>(SMSG_MESSAGE_CODE, String::class.java){
             override fun parserError(id: String?, name: String?, error: String?) {
             }
@@ -127,16 +128,16 @@ var lanServer: LanServer =
             override fun onSearchEnd() {
             }
 
-            override fun onSearchError(p0: String?) {
+            override fun onSearchError(error: String?) {
             }
 
             override fun onConnectStart() {
             }
 
-            override fun onConnectError(p0: String?) {
+            override fun onConnectError(error: String?) {
             }
 
-            override fun onConnect(p0: String?, p1: Int) {
+            override fun onConnect(ip: String, port: Int) {
             }
 
             override fun onVerification(device: ClientDeviceEntity, isSuccess: Boolean) {
@@ -149,16 +150,16 @@ var lanServer: LanServer =
             
             }
 
-            override fun onWriteStart(p0: String?) {
+            override fun onWriteStart(id: String) {
             }
 
-            override fun onWrite(p0: String?) {
+            override fun onWrite(id: String) {
             }
 
-            override fun onReadStart(p0: String?) {
+            override fun onReadStart(id: String) {
             }
 
-            override fun onRead(p0: String?) {
+            override fun onRead(id: String) {
             }
 
             override fun onDisconnect(id: String, error: String?) {
@@ -166,7 +167,7 @@ var lanServer: LanServer =
         })
         
 lanServer.addHandler(
-	object :PacketHandler<String>(CmsgOpCode.CMSG_MESSAGE_CODE, String::class.java){
+	object :PacketHandler<String>(CMSG_MESSAGE_CODE, String::class.java){
             override fun parserError(id: String?, name: String?, message: String?) {
 
             }
